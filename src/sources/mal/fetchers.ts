@@ -1,11 +1,10 @@
 import { DOMParser, pooledMap } from "../../deps.ts";
-import { type AnimeEntity, type MangaEntity } from "../../entities.ts";
 import { parseManga } from "./manga.ts";
 import { parseAnime } from "./anime.ts";
 
 const CHUNK_SIZE = 300;
 
-const buildOffsets = (total: number, chunkSize: number = CHUNK_SIZE): number[] => {
+const buildOffsets = (total: number, chunkSize: number = CHUNK_SIZE) => {
   const length = Math.ceil(total / chunkSize);
   const offsets = Array.from({ length }, (_, idx) => idx * chunkSize);
 
@@ -22,7 +21,7 @@ const fetchChunk = async (url: URL): Promise<unknown[]> => {
   return response.json();
 };
 
-export const fetchProfileDocument = async (profileUrl: URL): Promise<Document> => {
+export const fetchProfileDocument = async (profileUrl: URL) => {
   const response = await fetch(profileUrl);
   const html = await response.text();
 
@@ -45,7 +44,7 @@ export interface FetchAnimeArgs {
   poolLimit?: number;
 }
 
-export const fetchAnimeList = async (args: FetchAnimeArgs): Promise<AnimeEntity[]> => {
+export const fetchAnimeList = async (args: FetchAnimeArgs) => {
   const poolLimit = args.poolLimit ?? 4;
   const offsets = buildOffsets(args.animeTotal);
 
@@ -54,7 +53,7 @@ export const fetchAnimeList = async (args: FetchAnimeArgs): Promise<AnimeEntity[
     return fetchChunk(url);
   });
 
-  const animes: AnimeEntity[] = [];
+  const animes: ReturnType<typeof parseAnime>[] = [];
 
   for await (const chunk of allChunks) {
     chunk.forEach((data) => {
@@ -71,7 +70,7 @@ export interface FetchMangaArgs {
   poolLimit?: number;
 }
 
-export const fetchMangaList = async (args: FetchMangaArgs): Promise<MangaEntity[]> => {
+export const fetchMangaList = async (args: FetchMangaArgs) => {
   const poolLimit = args.poolLimit ?? 4;
   const offsets = buildOffsets(args.mangaTotal);
 
@@ -80,7 +79,7 @@ export const fetchMangaList = async (args: FetchMangaArgs): Promise<MangaEntity[
     return fetchChunk(url);
   });
 
-  const mangas: MangaEntity[] = [];
+  const mangas: ReturnType<typeof parseManga>[] = [];
 
   for await (const chunk of allChunks) {
     chunk.forEach((data) => {
