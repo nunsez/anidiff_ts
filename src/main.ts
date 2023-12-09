@@ -1,95 +1,78 @@
-import { initSettings } from "./settings.ts";
 import * as mal from "./sources/mal/index.ts";
 import * as shiki from "./sources/shiki/index.ts";
-import {
-  type AnimeEntity,
-  type EqualsFunc,
-  isAnimeEquals,
-  isMangaEquals,
-  type MangaEntity,
-} from "./entities.ts";
+import { getDiff, isDiffEmpty } from "./comparator.ts";
+import { isAnimeEquals, isMangaEquals } from "./entities.ts";
 
-async function main() {
-  initSettings();
+export const getMangaDiff = async (malProfileName: string, shikiProfileName: string) => {
+  const malMangaList = await mal.mangaList(malProfileName);
+  const shikiMangaList = await shiki.mangaList(shikiProfileName);
+  const mangaDiff = getDiff(malMangaList, shikiMangaList, isMangaEquals);
 
-  const malAnimeList = await mal.fetchAnimeList();
-  const shikiAnimeList = await shiki.fetchAnimeList();
+  return mangaDiff;
+};
+
+export const getAnimeDiff = async (malProfileName: string, shikiProfileName: string) => {
+  const malAnimeList = await mal.animeList(malProfileName);
+  const shikiAnimeList = await shiki.animeList(shikiProfileName);
   const animeDiff = getDiff(malAnimeList, shikiAnimeList, isAnimeEquals);
 
-  if (!isEmptyDiff(animeDiff)) {
+  return animeDiff;
+};
+
+const readName = (envKey: string, message: string) => {
+  const envValue = (Deno.env.get(envKey) ?? "").trim();
+
+  if (envValue !== "") {
+    return envValue;
+  }
+
+  console.log(message);
+
+  const promptName = prompt("");
+
+  if (!promptName) {
+    throw new Error("No name provided. Exit");
+  }
+
+  return promptName;
+};
+
+const report = (entity: { id: unknown; title: unknown }) => {
+  console.log(`${entity.id}: ${entity.title}`);
+};
+
+const main = async () => {
+  const malProfileName = readName("MAL_NAME", "Enter Shikimori Profile name:");
+  const shikiProfileName = readName("SHIKI_NAME", "Enter Myanimelist Profile name:");
+
+  const animeDiff = await getAnimeDiff(malProfileName, shikiProfileName);
+  const anyAnimeDiff = !isDiffEmpty(animeDiff);
+
+  const mangaDiff = await getMangaDiff(malProfileName, shikiProfileName);
+  const anyMangaDiff = !isDiffEmpty(mangaDiff);
+
+  if (!anyAnimeDiff && !anyMangaDiff) {
+    console.log("No difference.");
+    Deno.exit(0);
+  }
+
+  if (anyAnimeDiff) {
     console.log("Anime diff:");
     Object.values(animeDiff).forEach(report);
   }
 
-  const malMangaList = await mal.fetchMangaList();
-  const shikiMangaList = await shiki.fetchMangaList();
-  const mangaDiff = getDiff(malMangaList, shikiMangaList, isMangaEquals);
-
-  if (!isEmptyDiff(mangaDiff)) {
-    if (!isEmptyDiff(animeDiff)) {
-      console.log();
-    }
+  if (anyMangaDiff) {
+    if (anyAnimeDiff) console.log();
 
     console.log("Manga diff:");
     Object.values(mangaDiff).forEach(report);
   }
 
-  if (isEmptyDiff(animeDiff) && isEmptyDiff(mangaDiff)) {
-    console.log("No difference.");
-  }
-
-  prompt("Press Enter key to exit.");
-}
-
-function getDiff<T extends { id: number }>(
-  list1: T[],
-  list2: T[],
-  equalsFn: EqualsFunc<T>,
-) {
-  const list1Map = list1.reduce<Record<string, T>>((acc, item) => {
-    acc[item.id.toString()] = item;
-    return acc;
-  }, {});
-
-  const list2Map = list2.reduce<Record<string, T>>((acc, item) => {
-    acc[item.id.toString()] = item;
-    return acc;
-  }, {});
-
-  const list1Diff = findDiff(list1Map, list2Map, equalsFn);
-  const list2Diff = findDiff(list2Map, list1Map, equalsFn);
-  const uniq = findDiff(list1Diff, list2Diff, (_, s) => !s);
-
-  return uniq;
-}
-
-function findDiff<T>(
-  items: Record<string, T>,
-  others: Record<string, T>,
-  isEquals: EqualsFunc<T>,
-): Record<string, T> {
-  const result: Record<string, T> = {};
-
-  for (const [key, item] of Object.entries(items)) {
-    const other = others[key];
-    const equalsResult = isEquals(item, other);
-
-    if (!equalsResult) {
-      result[key] = item;
-    }
-  }
-
-  return result;
-}
-
-function report(entity: MangaEntity | AnimeEntity) {
-  console.log(`${entity.id}: ${entity.title}`);
-}
-
-function isEmptyDiff(diff: Record<number, unknown>) {
-  return Object.keys(diff).length === 0;
-}
+  Deno.exit(0);
+};
 
 if (import.meta.main) {
   await main();
+
+  prompt("Press Enter key to exit.");
 }
