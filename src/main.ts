@@ -1,7 +1,13 @@
 import { initSettings } from "./settings.ts";
 import * as mal from "./sources/mal/index.ts";
 import * as shiki from "./sources/shiki/index.ts";
-import { type AnimeEntity, type EqualsFunc, isAnimeEquals, isMangaEquals, type MangaEntity } from "./entities.ts";
+import {
+  type AnimeEntity,
+  type EqualsFunc,
+  isAnimeEquals,
+  isMangaEquals,
+  type MangaEntity,
+} from "./entities.ts";
 
 async function main() {
   initSettings();

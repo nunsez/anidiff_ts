@@ -18,7 +18,7 @@
   },
   "fmt": {
     "indentWidth": 2,
-    "lineWidth": 120,
+    "lineWidth": 100,
     "proseWrap": "preserve",
     "semiColons": true,
     "singleQuote": false,
