@@ -1,5 +1,5 @@
 import { fetchAnimeList, fetchMangaList, fetchProfileDocument } from "./fetchers.ts";
-import { animeUrl, mangaUrl, profileUrl } from "./settings.ts";
+import { animeUrl, mangaUrl, profileUrl } from "./utils.ts";
 
 const isTotalSection = (element: HTMLElement) => {
   const span = element.querySelector<HTMLSpanElement>("span:first-of-type");
