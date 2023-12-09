@@ -27,7 +27,7 @@ const animeParser = z.object({
   episodes: z.number().int().nonnegative(),
 });
 
-export function parseAnime(data: unknown): AnimeEntity {
+export const parseAnime = (data: unknown): AnimeEntity => {
   const anime = animeParser.parse(data);
   const status = statusDecodeMap[anime.status];
 
@@ -39,4 +39,4 @@ export function parseAnime(data: unknown): AnimeEntity {
     episodesWatched: anime.episodes,
     source: "shiki",
   };
-}
+};
