@@ -1,0 +1,27 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "compilerOptions": {
+    "checkJs": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
+    "lib": [
+      "deno.window",
+      "dom",
+      "dom.iterable"
+    ]
+  },
+  "fmt": {
+    "indentWidth": 2,
+    "lineWidth": 120,
+    "proseWrap": "preserve",
+    "semiColons": true,
+    "singleQuote": false,
+    "useTabs": false
+  }
+}
