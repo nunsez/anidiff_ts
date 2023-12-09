@@ -28,7 +28,7 @@ const mangaParser = z.object({
   num_read_volumes: z.number().int().nonnegative(),
 });
 
-export function parseManga(data: unknown): MangaEntity {
+export const parseManga = (data: unknown): MangaEntity => {
   const manga = mangaParser.parse(data);
   const status = statusDecodeMap[manga.status];
 
@@ -41,4 +41,4 @@ export function parseManga(data: unknown): MangaEntity {
     volumesRead: manga.num_read_volumes,
     source: "mal",
   };
-}
+};
