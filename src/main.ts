@@ -26,9 +26,7 @@ const readName = (envKey: string, message: string) => {
     return envValue;
   }
 
-  console.log(message);
-
-  const promptName = prompt("");
+  const promptName = prompt(message);
 
   if (!promptName) {
     throw new Error("No name provided. Exit");
@@ -42,8 +40,8 @@ const report = (entity: { id: unknown; title: unknown }) => {
 };
 
 const main = async () => {
-  const malProfileName = readName("MAL_NAME", "Enter Shikimori Profile name:");
-  const shikiProfileName = readName("SHIKI_NAME", "Enter Myanimelist Profile name:");
+  const malProfileName = readName("MAL_NAME", "Enter Myanimelist profile name:");
+  const shikiProfileName = readName("SHIKI_NAME", "Enter Shikimori profile name:");
 
   const animeDiff = await getAnimeDiff(malProfileName, shikiProfileName);
   const anyAnimeDiff = !isDiffEmpty(animeDiff);
@@ -52,8 +50,8 @@ const main = async () => {
   const anyMangaDiff = !isDiffEmpty(mangaDiff);
 
   if (!anyAnimeDiff && !anyMangaDiff) {
-    console.log("No difference.");
-    Deno.exit(0);
+    console.log("No difference");
+    return;
   }
 
   if (anyAnimeDiff) {
@@ -67,12 +65,14 @@ const main = async () => {
     console.log("Manga diff:");
     Object.values(mangaDiff).forEach(report);
   }
-
-  Deno.exit(0);
 };
 
 if (import.meta.main) {
-  await main();
+  try {
+    await main();
+  } catch (e) {
+    console.log(e.message);
+  }
 
-  prompt("Press Enter key to exit.");
+  alert("\nPress the Enter key to exit the program");
 }

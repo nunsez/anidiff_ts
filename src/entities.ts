@@ -35,7 +35,7 @@ export const isAnimeEquals = (a1: AnimeEntity | undefined, a2: AnimeEntity | und
   return a1.status === a2.status &&
     a1.score === a2.score &&
     a1.episodesWatched === a2.episodesWatched;
-}
+};
 
 export const isMangaEquals = (a1: MangaEntity | undefined, a2: MangaEntity | undefined) => {
   if (!a1 || !a2) return false;
@@ -44,4 +44,4 @@ export const isMangaEquals = (a1: MangaEntity | undefined, a2: MangaEntity | und
     a1.score === a2.score &&
     a1.chaptersRead === a2.chaptersRead &&
     a1.volumesRead === a2.volumesRead;
-}
+};
