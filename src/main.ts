@@ -40,15 +40,15 @@ function getDiff<T extends { id: number }>(
   list2: T[],
   equalsFn: EqualsFunc<T>,
 ) {
-  const list1Map: Record<number, T> = {};
-  list1.forEach((item) => {
-    list1Map[item.id] = item;
-  });
+  const list1Map = list1.reduce<Record<string, T>>((acc, item) => {
+    acc[item.id.toString()] = item;
+    return acc;
+  }, {});
 
-  const list2Map: Record<number, T> = {};
-  list2.forEach((item) => {
-    list2Map[item.id] = item;
-  });
+  const list2Map = list2.reduce<Record<string, T>>((acc, item) => {
+    acc[item.id.toString()] = item;
+    return acc;
+  }, {});
 
   const list1Diff = findDiff(list1Map, list2Map, equalsFn);
   const list2Diff = findDiff(list2Map, list1Map, equalsFn);
@@ -58,28 +58,22 @@ function getDiff<T extends { id: number }>(
 }
 
 function findDiff<T>(
-  items: Record<number, T>,
-  others: Record<number, T>,
-  isEqual: EqualsFunc<T>,
-): Record<number, T> {
-  const result: Record<number, T> = {};
+  items: Record<string, T>,
+  others: Record<string, T>,
+  isEquals: EqualsFunc<T>,
+): Record<string, T> {
+  const result: Record<string, T> = {};
 
-  Object.keys(items).forEach((key) => {
-    const id = Number.parseInt(key);
-    const item = items[id]!;
-    const other = others[id];
-    const equalsResult = isEqual(item, other);
+  for (const [key, item] of Object.entries(items)) {
+    const other = others[key];
+    const equalsResult = isEquals(item, other);
 
     if (!equalsResult) {
-      result[id] = item;
+      result[key] = item;
     }
-  });
+  }
 
   return result;
-}
-
-if (import.meta.main) {
-  await main();
 }
 
 function report(entity: MangaEntity | AnimeEntity) {
@@ -88,4 +82,8 @@ function report(entity: MangaEntity | AnimeEntity) {
 
 function isEmptyDiff(diff: Record<number, unknown>) {
   return Object.keys(diff).length === 0;
+}
+
+if (import.meta.main) {
+  await main();
 }
