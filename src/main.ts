@@ -40,7 +40,7 @@ const report = (entity: { id: unknown; title: unknown }) => {
 };
 
 const main = async () => {
-  const malProfileName = readName("MAL_NAME", "Enter Myanimelist profile name:");
+  const malProfileName = readName("MAL_NAME", "Enter MyAnimeList profile name:");
   const shikiProfileName = readName("SHIKI_NAME", "Enter Shikimori profile name:");
 
   const animeDiff = await getAnimeDiff(malProfileName, shikiProfileName);

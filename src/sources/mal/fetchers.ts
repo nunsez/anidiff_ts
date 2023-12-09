@@ -28,13 +28,13 @@ export const fetchProfileDocument = async (profileUrl: URL) => {
   const html = await response.text();
 
   if (response.status !== 200) {
-    throw new Error("Myanimelist profile not found");
+    throw new Error("MyAnimeList profile not found");
   }
 
   const document = new DOMParser().parseFromString(html, "text/html");
 
   if (!document) {
-    throw new Error("Myanimelist profile parse Error");
+    throw new Error("MyAnimeList profile parse Error");
   }
 
   return document as unknown as Document;
