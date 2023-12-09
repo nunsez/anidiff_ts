@@ -3,6 +3,7 @@ import { parseManga } from "./manga.ts";
 import { parseAnime } from "./anime.ts";
 
 const CHUNK_SIZE = 300;
+const POOL_LIMIT = 4;
 
 const buildOffsets = (total: number, chunkSize: number = CHUNK_SIZE) => {
   const length = Math.ceil(total / chunkSize);
@@ -45,7 +46,7 @@ export interface FetchAnimeArgs {
 }
 
 export const fetchAnimeList = async (args: FetchAnimeArgs) => {
-  const poolLimit = args.poolLimit ?? 4;
+  const poolLimit = args.poolLimit ?? POOL_LIMIT;
   const offsets = buildOffsets(args.animeTotal);
 
   const allChunks = pooledMap(poolLimit, offsets, (offset) => {
@@ -71,7 +72,7 @@ export interface FetchMangaArgs {
 }
 
 export const fetchMangaList = async (args: FetchMangaArgs) => {
-  const poolLimit = args.poolLimit ?? 4;
+  const poolLimit = args.poolLimit ?? POOL_LIMIT;
   const offsets = buildOffsets(args.mangaTotal);
 
   const allChunks = pooledMap(poolLimit, offsets, (offset) => {
