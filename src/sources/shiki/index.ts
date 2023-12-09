@@ -1,5 +1,5 @@
 import { fetchAnimeList, fetchMangaList } from "./fetchers.ts";
-import { animeUrl, mangaUrl } from "./settings.ts";
+import { animeUrl, mangaUrl } from "./utils.ts";
 
 export const animeList = async (profileName: string) => {
   const animes = await fetchAnimeList(animeUrl(profileName));
