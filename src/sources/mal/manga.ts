@@ -29,7 +29,14 @@ const mangaParser = z.object({
 });
 
 export const parseManga = (data: unknown): MangaEntity => {
-  const manga = mangaParser.parse(data);
+  let manga;
+
+  try {
+    manga = mangaParser.parse(data);
+  } catch {
+    throw new Error("Unexpected MyAnimeList manga data format", { cause: data });
+  }
+
   const status = statusDecodeMap[manga.status];
 
   return {

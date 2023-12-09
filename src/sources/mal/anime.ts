@@ -28,7 +28,14 @@ const animeParser = z.object({
 });
 
 export const parseAnime = (data: unknown): AnimeEntity => {
-  const anime = animeParser.parse(data);
+  let anime;
+
+  try {
+    anime = animeParser.parse(data);
+  } catch {
+    throw new Error("Unexpected MyAnimeList anime data format", { cause: data });
+  }
+
   const status = statusDecodeMap[anime.status];
 
   return {
