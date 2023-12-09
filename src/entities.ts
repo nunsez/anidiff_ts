@@ -29,7 +29,7 @@ export type MangaEntity = {
 
 export type EqualsFunc<T> = (e1: T | undefined, e2: T | undefined) => boolean;
 
-export function isAnimeEquals(a1: AnimeEntity | undefined, a2: AnimeEntity | undefined) {
+export const isAnimeEquals = (a1: AnimeEntity | undefined, a2: AnimeEntity | undefined) => {
   if (!a1 || !a2) return false;
 
   return a1.status === a2.status &&
@@ -37,7 +37,7 @@ export function isAnimeEquals(a1: AnimeEntity | undefined, a2: AnimeEntity | und
     a1.episodesWatched === a2.episodesWatched;
 }
 
-export function isMangaEquals(a1: MangaEntity | undefined, a2: MangaEntity | undefined) {
+export const isMangaEquals = (a1: MangaEntity | undefined, a2: MangaEntity | undefined) => {
   if (!a1 || !a2) return false;
 
   return a1.status === a2.status &&
