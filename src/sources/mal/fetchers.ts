@@ -1,4 +1,5 @@
-import { DOMParser, pooledMap } from "../../deps.ts";
+import { pooledMap } from "std/async/pool.ts";
+import { DOMParser } from "deno-dom-wasm";
 import { parseManga } from "./manga.ts";
 import { parseAnime } from "./anime.ts";
 

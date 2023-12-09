@@ -23,5 +23,10 @@
     "semiColons": true,
     "singleQuote": false,
     "useTabs": false
+  },
+  "imports": {
+    "deno-dom-wasm" :"https://deno.land/x/deno_dom@v0.1.43/deno-dom-wasm.ts",
+    "std/": "https://deno.land/std@0.208.0/",
+    "z": "https://deno.land/x/zod@v3.22.4/mod.ts"
   }
 }

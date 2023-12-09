@@ -1,4 +1,4 @@
-import { z } from "../../deps.ts";
+import { z } from "z";
 import { type AnimeEntity, entityStatuses } from "../../entities.ts";
 
 const statusEncodeMap = {
