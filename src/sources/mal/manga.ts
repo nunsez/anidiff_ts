@@ -20,7 +20,7 @@ const statusDecodeMap = {
 const statusParser = z.nativeEnum(statusEncodeMap);
 
 const mangaParser = z.object({
-  id: z.number().int().positive(),
+  manga_id: z.number().int().positive(),
   manga_title: z.union([z.string(), z.number()]),
   score: z.number().int().gte(0).lte(10),
   status: statusParser,
@@ -40,7 +40,7 @@ export const parseManga = (data: unknown): MangaEntity => {
   const status = statusDecodeMap[manga.status];
 
   return {
-    id: manga.id,
+    id: manga.manga_id,
     title: manga.manga_title,
     score: manga.score,
     status,
