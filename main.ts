@@ -1,7 +1,7 @@
-import * as mal from "./sources/mal/index.ts";
-import * as shiki from "./sources/shiki/index.ts";
-import { getDiff, isDiffEmpty } from "./comparator.ts";
-import { isAnimeEquals, isMangaEquals } from "./entities.ts";
+import * as mal from "./src/sources/mal/index.ts";
+import * as shiki from "./src/sources/shiki/index.ts";
+import { getDiff, isDiffEmpty } from "./src/comparator.ts";
+import { isAnimeEquals, isMangaEquals } from "./src/entities.ts";
 
 export const getMangaDiff = async (malProfileName: string, shikiProfileName: string) => {
   const malMangaList = await mal.mangaList(malProfileName);
